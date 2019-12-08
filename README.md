@@ -4,6 +4,7 @@ Projeto criado com [Spring](https://spring.io/) version 2.1.1.
 
 ## Acesso Online do Sistema 
 ### (Hospedado no Google Cloud Plataform, usando Container Docker)
+### (Servidor de Aplicação [WildFly](https://wildfly.org/))
 
 http://tschannerl.com.br/
 
