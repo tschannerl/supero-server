@@ -1,13 +1,14 @@
 package com.tschannerl.superoserver;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@SpringBootTest
-class SuperoServerApplicationTests {
+@RunWith(SpringRunner.class)
+public class SuperoServerApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
 	}
 
 }
