@@ -115,4 +115,22 @@ public class TaskController {
                 refTask
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Task> delete(@PathVariable String id){
+        try{
+            Optional<Task> task = taskService.findById(Long.parseLong(id));
+
+            if (task.isPresent()) {
+                taskService.delete(task.get());
+            }else{
+                logger.warn(String.format("Não foi identificado a tarefa [%d]", id));
+                throw new BadRequestInfoException(String.format("Não foi identificado a tarefa [%d]", id));
+            }
+        }catch (Exception ex){
+            logger.error(String.format("Problema para deletar a Tarefa [%d]", id), ex);
+            throw new BadRequestInfoException(String.format("Problema para deletar a Tarefa [%d]", id));
+        }
+        return ResponseEntity.ok().build();
+    }
 }

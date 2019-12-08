@@ -36,4 +36,10 @@ public class TaskServiceImpl implements TaskService {
         logger.info(String.format("Salvando a Tarefa [%s]", task.getTitle()));
         return taskRepository.save(task);
     }
+
+    @Override
+    public void delete(Task task) throws Exception {
+        logger.info(String.format("Deletando a Tarefa [%s]", task.getTitle()));
+        taskRepository.delete(task);
+    }
 }

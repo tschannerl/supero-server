@@ -11,4 +11,5 @@ public interface TaskService {
     Optional<Task> findById(Long id);
     List<Task> findAllTask();
     Task save(Task task) throws Exception;
+    void delete(Task task) throws Exception;
 }
