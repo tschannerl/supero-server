@@ -41,4 +41,11 @@ public class Task {
         this.description = description;
         this.dtUpdate = dtUpdate;
     }
+
+    public Task(Long id, Date dtUpdate, Date dtConclusion, Status status) {
+        this.id = id;
+        this.dtUpdate = dtUpdate;
+        this.dtConclusion = dtConclusion;
+        this.status = status;
+    }
 }

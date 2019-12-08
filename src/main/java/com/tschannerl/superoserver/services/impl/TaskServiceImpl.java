@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -17,6 +18,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @Override
+    public Optional<Task> findById(Long id) {
+        logger.info(String.format("Buscando uma Tarefas"));
+        return taskRepository.findById(id);
+    }
 
     @Override
     public List<Task> findAllTask() {

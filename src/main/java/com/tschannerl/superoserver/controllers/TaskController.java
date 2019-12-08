@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/task")
@@ -57,11 +58,58 @@ public class TaskController {
         Date now = Date.from(LocalDateTime.now().atZone(ZoneId.ofOffset("UTC", ZoneOffset.of("-00:00"))).toInstant());
         Task refTask;
         try{
-            logger.info("Atualizando a tarefa ao Banco");
-            refTask = taskService.save(new Task(Long.parseLong(id), title, description, now));
+            Optional<Task> task = taskService.findById(Long.parseLong(id));
+
+            if (task.isPresent()) {
+                task.get().setTitle(title);
+                task.get().setDescription(description);
+                task.get().setDtUpdate(now);
+
+                logger.info("Atualizando a tarefa ao Banco");
+                refTask = taskService.save(task.get());
+            }else{
+                logger.warn(String.format("Não foi identificado a tarefa [%s]", title));
+                throw new BadRequestInfoException(String.format("Não foi identificado a tarefa [%s]", title));
+            }
         }catch (Exception ex){
             logger.error(String.format("Problema ao atualizar Tarefa [%s]", title), ex);
             throw new BadRequestInfoException(String.format("Problema ao atualizar a Tarefa [%s]", title));
+        }
+        return ResponseEntity.ok().body(
+                refTask
+        );
+    }
+
+    @PutMapping("/status")
+    public ResponseEntity<Task> updateStatus(@RequestParam("id") String id, @RequestParam("status") String status){
+
+        Date now = Date.from(LocalDateTime.now().atZone(ZoneId.ofOffset("UTC", ZoneOffset.of("-00:00"))).toInstant());
+
+        Task refTask;
+        try{
+
+            Optional<Task> task = taskService.findById(Long.parseLong(id));
+
+            if (task.isPresent()) {
+                task.get().setDtUpdate(now);
+
+                logger.info("Atualizando o status da tarefa ao Banco");
+                if (status.equals("true")){
+                    task.get().setStatus(Task.Status.COMPLETED);
+                    task.get().setDtConclusion(now);
+                }else{
+                    task.get().setStatus(Task.Status.RUN);
+                    task.get().setDtConclusion(null);
+                }
+
+                refTask = taskService.save(task.get());
+            }else{
+                logger.warn(String.format("Não foi identificado a tarefa [%d]", id));
+                throw new BadRequestInfoException(String.format("Não foi identificado a tarefa [%d]", id));
+            }
+        }catch (Exception ex){
+            logger.error(String.format("Problema ao atualizar status da Tarefa [%d]", id), ex);
+            throw new BadRequestInfoException(String.format("Problema ao atualizar status da Tarefa [%d]", id));
         }
         return ResponseEntity.ok().body(
                 refTask
